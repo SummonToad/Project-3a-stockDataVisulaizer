@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+chart.svg
+.venv/
+venv/
+.idea/
+.vscode/

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stock Data Visualizer</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1150px; margin: 2rem auto; padding: 0 1rem; }
+    form { display: grid; gap: 1rem; max-width: 420px; }
+    label { display: grid; gap: .25rem; font-weight: 600; }
+    select, input, button { padding: .5rem; font-size: 1rem; }
+    button { cursor: pointer; }
+    .errors { background: #fdecea; border: 1px solid #f5c2c0; color: #8a1f17;
+              padding: .75rem 1rem; border-radius: 6px; max-width: 420px; margin-bottom: 1rem; }
+    .chart { margin-top: 2rem; overflow-x: auto; }
+    .chart img { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Stock Data Visualizer</h1>
+
+  {% if errors %}
+  <div class="errors">
+    <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <form method="POST" action="/">
+    <label>Stock symbol
+      <select name="symbol">
+        <option value="">-- Select a symbol --</option>
+        {% for s in symbols %}
+        <option value="{{ s }}" {{ 'selected' if form.get('symbol') == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Chart type
+      <select name="chart_type">
+        <option value="">-- Select a chart type --</option>
+        {% for value, label in chart_types.items() %}
+        <option value="{{ value }}" {{ 'selected' if form.get('chart_type') == value }}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Time series
+      <select name="time_series">
+        <option value="">-- Select a time series --</option>
+        {% for value, label in series.items() %}
+        <option value="{{ value }}" {{ 'selected' if form.get('time_series') == value }}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Start date
+      <input type="date" name="start_date" value="{{ form.get('start_date', '') }}">
+    </label>
+
+    <label>End date
+      <input type="date" name="end_date" value="{{ form.get('end_date', '') }}">
+    </label>
+
+    <button type="submit">Generate chart</button>
+  </form>
+
+  {% if chart %}
+  <div class="chart">
+    <img src="{{ chart }}" alt="Stock chart">
+  </div>
+  {% endif %}
+</body>
+</html>
